@@ -22,7 +22,21 @@ public class StudentService {
     }
 
     public List<Student> searchByName(String keyword) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return getAll();
+        }
         return repository.findByNameContainingIgnoreCase(keyword);
     }
 
+    public Student save(Student student) {
+        return repository.save(student);
+    }
+
+    public void deleteById(String id) {
+        repository.deleteById(id);
+    }
+
+    public boolean existsById(String id) {
+        return repository.existsById(id);
+    }
 }
