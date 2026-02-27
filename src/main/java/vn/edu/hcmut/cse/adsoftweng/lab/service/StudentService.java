@@ -21,4 +21,8 @@ public class StudentService {
         return repository.findById(id).orElse(null);
     }
 
+    public List<Student> searchByName(String keyword) {
+        return repository.findByNameContainingIgnoreCase(keyword);
+    }
+
 }
