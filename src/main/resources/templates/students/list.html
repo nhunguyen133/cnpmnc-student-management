@@ -60,28 +60,29 @@
                     class="bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center fw-bold"
                     style="width: 40px; height: 40px"
                   >
-                    <span th:text="${#strings.substring(student.name,0,1)}"
-                      >A</span
-                    >
+                    <span th:text="${#strings.substring(student.name,0,1)}">A</span>
                   </div>
                   <span
-                    class="fw-semibold text-dark"
+                    class="fw-semibold"
+                    th:classappend="${student.age < 18 ? 'text-danger' : 'text-dark'}"
                     th:text="${student.name}"
                   ></span>
                 </div>
               </td>
-              <td class="text-muted">
-                <i class="bi bi-envelope me-2"></i
-                ><span th:text="${student.email}"></span>
+              <td th:classappend="${student.age < 18 ? 'text-danger' : 'text-muted'}">
+                <i class="bi bi-envelope me-2"></i>
+                <span th:text="${student.email}"></span>
               </td>
               <td>
                 <span
-                  class="badge bg-light text-dark border px-2 py-1 rounded-pill"
+                  class="badge px-2 py-1 rounded-pill"
+                  th:classappend="${student.age < 18 ? 'bg-danger text-white' : 'bg-light text-dark border'}"
                   th:text="${student.age}"
                 ></span>
               </td>
               <td
-                class="text-muted font-monospace small"
+                class="font-monospace small"
+                th:classappend="${student.age < 18 ? 'text-danger' : 'text-muted'}"
                 th:text="${student.id}"
               ></td>
               <td class="text-end pe-4">
