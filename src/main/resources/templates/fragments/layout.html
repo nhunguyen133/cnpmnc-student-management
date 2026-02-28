@@ -1,0 +1,79 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="page(title, content)">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${title}">Quản lý sinh viên</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  </head>
+  <body>
+    <!-- Page background image (covers whole page) -->
+    <div class="page-bg" aria-hidden="true"></div>
+
+    <!-- Top hero overlay: semi-transparent grid + blur to soften background at the top -->
+    <div class="hero-overlay" aria-hidden="true"></div>
+    <nav class="navbar navbar-expand-lg navbar-custom">
+      <div
+        class="modern-container d-flex align-items-center justify-content-between py-2"
+      >
+        <a
+          class="navbar-brand d-flex align-items-center gap-3 text-dark text-decoration-none"
+          th:href="@{/students}"
+        >
+          <div
+            class="bg-primary bg-opacity-10 p-2 rounded-4 text-primary d-flex"
+          >
+            <i class="bi bi-layers-fill fs-5"></i>
+          </div>
+          <span class="fw-bold tracking-tight">HCMUT Portal</span>
+        </a>
+      </div>
+    </nav>
+
+    <div class="modern-container position-relative z-3 mt-4">
+      <div
+        th:if="${message}"
+        class="alert alert-success alert-dismissible fade show shadow-sm border-0 bg-success text-white rounded-3"
+        role="alert"
+      >
+        <i class="bi bi-check-circle-fill me-2"></i
+        ><span th:text="${message}"></span>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div
+        th:if="${error}"
+        class="alert alert-danger alert-dismissible fade show shadow-sm border-0 bg-danger text-white rounded-3"
+        role="alert"
+      >
+        <i class="bi bi-exclamation-triangle-fill me-2"></i
+        ><span th:text="${error}"></span>
+        <button
+          type="button"
+          class="btn-close btn-close-white"
+          data-bs-dismiss="alert"
+          aria-label="Close"
+        ></button>
+      </div>
+    </div>
+
+    <main class="modern-container section-spacing fade-in-up">
+      <div th:replace="${content}"></div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/main.js}"></script>
+  </body>
+</html>

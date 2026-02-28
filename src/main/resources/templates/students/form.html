@@ -1,0 +1,78 @@
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{fragments/layout :: page(${isEdit ? 'Sửa Thông Tin' : 'Thêm Sinh Viên'}, ~{::section})}"
+>
+  <section>
+    <div class="mb-4">
+      <a
+        th:href="@{/students}"
+        class="btn btn-light-subtle btn-sm rounded-pill px-3 py-2 fw-medium"
+      >
+        <i class="bi bi-arrow-left me-1"></i> Hủy và quay lại
+      </a>
+    </div>
+
+    <div class="card card-normal col-md-8 col-lg-6 mx-auto border-0 p-4">
+      <div class="card-body">
+        <h3
+          class="fw-bold mb-2 text-dark"
+          th:text="${isEdit ? 'Cập nhật thông tin' : 'Thêm hồ sơ mới'}"
+        ></h3>
+        <p class="text-muted mb-4">
+          Vui lòng điền đầy đủ và chính xác các thông tin bên dưới.
+        </p>
+
+        <form
+          th:action="${isEdit ? '/students/' + student.id + '/edit' : '/students/new'}"
+          th:object="${student}"
+          method="post"
+        >
+          <input type="hidden" th:field="*{id}" th:if="${isEdit}" />
+
+          <div class="mb-4">
+            <label class="form-label">Họ và Tên</label>
+            <input
+              type="text"
+              class="form-control form-control-lg"
+              th:field="*{name}"
+              placeholder="Ví dụ: Nguyễn Văn A"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Địa chỉ Email</label>
+            <input
+              type="email"
+              class="form-control form-control-lg"
+              th:field="*{email}"
+              placeholder="example@hcmut.edu.vn"
+              required
+            />
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label">Độ tuổi</label>
+            <input
+              type="number"
+              class="form-control form-control-lg"
+              th:field="*{age}"
+              placeholder="Nhập độ tuổi hợp lệ..."
+              required
+              min="1"
+            />
+          </div>
+
+          <div class="d-grid mt-4">
+            <button
+              type="submit"
+              class="btn btn-primary btn-lg rounded-pill fw-semibold py-3"
+            >
+              Lưu thông tin hồ sơ
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+</html>

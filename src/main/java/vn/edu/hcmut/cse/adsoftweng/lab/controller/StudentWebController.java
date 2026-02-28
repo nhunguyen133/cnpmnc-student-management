@@ -36,9 +36,9 @@ public class StudentWebController {
         return "students/list";
     }
 
-    // 2. Trang chi tiết sinh viên
+    // 2. Trang chi tiết sinh viên (ĐÃ FIX LỖI 500 TẠI ĐÂY)
     @GetMapping("/{id}")
-    public String getStudentDetail(@PathVariable String id, Model model) {
+    public String getStudentDetail(@PathVariable("id") String id, Model model) {
         Student student = service.getById(id);
         if (student == null) {
             return "redirect:/students?error=notfound";
@@ -58,14 +58,20 @@ public class StudentWebController {
     // 4. Xử lý thêm mới (POST)
     @PostMapping("/new")
     public String createStudent(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
+        // Lưu ý: Vì Entity của bạn quy định ID là String[cite: 255], 
+        // nếu bạn không tự nhập ID trên Form, bạn cần tự sinh ID ở đây.
+        if (student.getId() == null || student.getId().isEmpty()) {
+             student.setId(java.util.UUID.randomUUID().toString());
+        }
+        
         service.save(student);
         redirectAttributes.addFlashAttribute("message", "Thêm sinh viên thành công!");
         return "redirect:/students";
     }
 
-    // 5. Trang form chỉnh sửa (GET)
+    // 5. Trang form chỉnh sửa (GET) (ĐÃ FIX LỖI 500 TẠI ĐÂY)
     @GetMapping("/{id}/edit")
-    public String showEditForm(@PathVariable String id, Model model) {
+    public String showEditForm(@PathVariable("id") String id, Model model) {
         Student student = service.getById(id);
         if (student == null) {
             return "redirect:/students?error=notfound";
@@ -75,9 +81,9 @@ public class StudentWebController {
         return "students/form";
     }
 
-    // 6. Xử lý cập nhật (POST)
+    // 6. Xử lý cập nhật (POST) (ĐÃ FIX LỖI 500 TẠI ĐÂY)
     @PostMapping("/{id}/edit")
-    public String updateStudent(@PathVariable String id, 
+    public String updateStudent(@PathVariable("id") String id, 
                                 @ModelAttribute Student student,
                                 RedirectAttributes redirectAttributes) {
         student.setId(id);
@@ -86,9 +92,9 @@ public class StudentWebController {
         return "redirect:/students/" + id;
     }
 
-    // 7. Xử lý xóa (POST)
+    // 7. Xử lý xóa (POST) (ĐÃ FIX LỖI 500 TẠI ĐÂY)
     @PostMapping("/{id}/delete")
-    public String deleteStudent(@PathVariable String id, RedirectAttributes redirectAttributes) {
+    public String deleteStudent(@PathVariable("id") String id, RedirectAttributes redirectAttributes) {
         if (!service.existsById(id)) {
             redirectAttributes.addFlashAttribute("error", "Không tìm thấy sinh viên!");
             return "redirect:/students";
@@ -97,4 +103,4 @@ public class StudentWebController {
         redirectAttributes.addFlashAttribute("message", "Xóa sinh viên thành công!");
         return "redirect:/students";
     }
-} 
+}

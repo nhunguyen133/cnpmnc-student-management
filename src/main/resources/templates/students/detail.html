@@ -1,0 +1,88 @@
+<html
+  xmlns:th="http://www.thymeleaf.org"
+  th:replace="~{fragments/layout :: page('Chi Tiết Sinh Viên', ~{::section})}"
+>
+  <section>
+    <div class="mb-4">
+      <a
+        th:href="@{/students}"
+        class="btn btn-light-subtle btn-sm rounded-pill px-3 py-2 fw-medium"
+      >
+        <i class="bi bi-arrow-left me-1"></i> Quay lại danh sách
+      </a>
+    </div>
+
+    <div
+      class="card card-normal col-md-8 col-lg-6 mx-auto border-0 overflow-hidden p-0"
+    >
+      <div class="bg-primary bg-opacity-10 w-100" style="height: 100px"></div>
+
+      <div class="card-body px-5 pb-5 pt-0 text-center">
+        <div
+          class="bg-white rounded-circle p-1 d-inline-block shadow-sm mb-3"
+          style="margin-top: -45px"
+        >
+          <div
+            class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center fs-1 fw-bold"
+            style="width: 88px; height: 88px"
+          >
+            <span th:text="${#strings.substring(student.name,0,1)}"></span>
+          </div>
+        </div>
+
+        <h3 class="fw-bold mb-1 text-dark" th:text="${student.name}"></h3>
+        <p class="text-muted mb-4" th:text="${student.email}"></p>
+
+        <div class="row g-3 text-start mb-4">
+          <div class="col-6">
+            <div class="p-3 bg-light rounded-4">
+              <div class="text-muted small mb-1 fw-semibold text-uppercase">
+                Mã Sinh Viên
+              </div>
+              <div
+                class="fw-semibold font-monospace fs-5 text-dark"
+                th:text="${student.id}"
+              ></div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="p-3 bg-light rounded-4">
+              <div class="text-muted small mb-1 fw-semibold text-uppercase">
+                Độ tuổi
+              </div>
+              <div
+                class="fw-semibold fs-5 text-dark"
+                th:text="${student.age}"
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 mt-4">
+          <a
+            th:href="@{'/students/' + ${student.id} + '/edit'}"
+            class="btn btn-outline-dark px-4 py-2 rounded-pill fw-medium"
+          >
+            <i class="bi bi-pencil me-1"></i> Chỉnh sửa
+          </a>
+
+          <form
+            th:id="'deleteForm-' + ${student.id}"
+            th:action="@{'/students/' + ${student.id} + '/delete'}"
+            method="post"
+            class="m-0"
+          >
+            <button
+              type="button"
+              class="btn btn-danger px-4 py-2 rounded-pill shadow-none fw-medium"
+              th:data-id="${student.id}"
+              onclick="confirmDelete(this.getAttribute('data-id'))"
+            >
+              <i class="bi bi-trash me-1"></i> Xóa hồ sơ
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</html>
