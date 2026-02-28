@@ -27,7 +27,16 @@
           th:object="${student}"
           method="post"
         >
-          <input type="hidden" th:field="*{id}" th:if="${isEdit}" />
+          <input type="hidden" id="originalId" th:value="${student.id}" />
+          <div class="mb-4">
+            <label class="form-label">Mã sinh viên</label>
+            <input
+              type="text"
+              class="form-control form-control-lg"
+              th:field="*{id}"
+              placeholder="Ví dụ: SV001"
+            />
+          </div>
 
           <div class="mb-4">
             <label class="form-label">Họ và Tên</label>
@@ -72,6 +81,85 @@
             </button>
           </div>
         </form>
+        <script th:inline="javascript">
+          /*<![CDATA[*/
+          (function () {
+            const isEdit = /*[[${isEdit}]]*/ false;
+            if (!isEdit) return;
+
+            const form = document.currentScript.previousElementSibling; // the form
+            const originalIdInput = document.getElementById("originalId");
+            const originalId = originalIdInput ? originalIdInput.value : "";
+            const idField = form.querySelector('[name="id"]');
+
+            form.addEventListener("submit", async function (e) {
+              const newId = idField ? idField.value.trim() : "";
+              // if id unchanged or empty, proceed with normal submit to update
+              if (!originalId || newId === "" || newId === originalId) {
+                return; // allow default submit
+              }
+
+              e.preventDefault();
+              const submitBtn = form.querySelector('button[type="submit"]');
+              submitBtn.disabled = true;
+
+              try {
+                // 1) check if newId already exists via REST API
+                const check = await fetch(
+                  "/api/students/" + encodeURIComponent(newId),
+                  { method: "GET" },
+                );
+                // The API returns 200 with empty/null body when not found.
+                // Read the response text to determine existence reliably.
+                const checkText = await check.text();
+                if (
+                  check.ok &&
+                  checkText &&
+                  checkText.trim() !== "" &&
+                  checkText.trim() !== "null"
+                ) {
+                  alert("Mã sinh viên đã tồn tại. Vui lòng chọn mã khác.");
+                  submitBtn.disabled = false;
+                  return;
+                }
+
+                // 2) create new student by POSTing the same form data to /students/new
+                const formData = new FormData(form);
+                // ensure id field has newId
+                formData.set("id", newId);
+
+                const createRes = await fetch("/students/new", {
+                  method: "POST",
+                  body: formData,
+                  credentials: "same-origin",
+                });
+
+                if (!createRes.ok) {
+                  alert("Không thể tạo hồ sơ mới. Vui lòng thử lại.");
+                  submitBtn.disabled = false;
+                  return;
+                }
+
+                // 3) delete old student
+                const delRes = await fetch(
+                  "/students/" + encodeURIComponent(originalId) + "/delete",
+                  {
+                    method: "POST",
+                    credentials: "same-origin",
+                  },
+                );
+
+                // ignore delRes.ok check for now; redirect to new student page
+                window.location.href = "/students/" + encodeURIComponent(newId);
+              } catch (err) {
+                console.error(err);
+                alert("Lỗi khi cập nhật mã sinh viên.");
+                submitBtn.disabled = false;
+              }
+            });
+          })();
+          /*]]>*/
+        </script>
       </div>
     </div>
   </section>
