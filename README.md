@@ -90,12 +90,26 @@ student-management/
 
 ### REST API (`/api/students`)
 
-| Method | Endpoint | Description | Response |
-|--------|----------|-------------|----------|
-| `GET` | `/api/students` | Lấy danh sách tất cả sinh viên | `200 OK` + JSON array |
-| `GET` | `/api/students/{id}` | Lấy thông tin sinh viên theo ID | `200 OK` + JSON object |
+| Method | Endpoint | Description | Request Body | Response |
+|--------|----------|-------------|--------------|----------|
+| `GET` | `/api/students` | Lấy danh sách tất cả sinh viên | - | `200 OK` + JSON array |
+| `GET` | `/api/students/{id}` | Lấy thông tin sinh viên theo ID | - | `200 OK` + JSON object<br>`404 Not Found` nếu không tồn tại |
+| `GET` | `/api/students/search?keyword=` | Tìm kiếm sinh viên theo tên | - | `200 OK` + JSON array |
+| `POST` | `/api/students` | Tạo sinh viên mới | JSON object | `201 Created` + JSON object<br>`409 Conflict` nếu ID đã tồn tại |
+| `PUT` | `/api/students/{id}` | Cập nhật thông tin sinh viên | JSON object | `200 OK` + JSON object<br>`404 Not Found` nếu không tồn tại |
+| `DELETE` | `/api/students/{id}` | Xóa sinh viên theo ID | - | `204 No Content`<br>`404 Not Found` nếu không tồn tại |
 
-**Example Response:**
+**Example Request - POST `/api/students`:**
+```json
+{
+  "id": "SV001",
+  "name": "Nguyen Van A",
+  "email": "nva@example.com",
+  "age": 20
+}
+```
+
+**Example Response - GET `/api/students`:**
 ```json
 [
   {
@@ -261,12 +275,34 @@ Nguyên nhân nằm ở cấu hình `spring.jpa.hibernate.ddl-auto=create` trong
 
 ### API Testing (cURL)
 
+**1. GET - Lấy tất cả sinh viên**
 ```bash
-# Get all students
 curl http://localhost:8080/api/students
+```
 
-# Get student by ID
+**2. GET - Lấy sinh viên theo ID**
+```bash
 curl http://localhost:8080/api/students/SV001
+```
+
+**3. GET - Tìm kiếm sinh viên**
+```bash
+curl "http://localhost:8080/api/students/search?keyword=Nguyen"
+```
+
+**4. POST - Tạo sinh viên mới**
+```bash
+curl -X POST http://localhost:8080/api/students -H "Content-Type: application/json" -d "{\"id\":\"SV999\",\"name\":\"Test Student\",\"email\":\"test@example.com\",\"age\":20}"
+```
+
+**5. PUT - Cập nhật sinh viên**
+```bash
+curl -X PUT http://localhost:8080/api/students/SV001 -H "Content-Type: application/json" -d "{\"id\":\"SV001\",\"name\":\"Updated Name\",\"email\":\"updated@example.com\",\"age\":21}"
+```
+
+**6. DELETE - Xóa sinh viên**
+```bash
+curl -X DELETE http://localhost:8080/api/students/SV999
 ```
 
 ---
