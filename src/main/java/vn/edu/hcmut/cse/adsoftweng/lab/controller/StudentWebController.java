@@ -58,10 +58,11 @@ public class StudentWebController {
     // 4. Xử lý thêm mới (POST)
     @PostMapping("/new")
     public String createStudent(@ModelAttribute Student student, RedirectAttributes redirectAttributes) {
-        // Lưu ý: Vì Entity của bạn quy định ID là String[cite: 255], 
-        // nếu bạn không tự nhập ID trên Form, bạn cần tự sinh ID ở đây.
-        if (student.getId() == null || student.getId().isEmpty()) {
-             student.setId(java.util.UUID.randomUUID().toString());
+        // Kiểm tra ID đã tồn tại chưa
+        if (service.existsById(student.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Mã sinh viên '" + student.getId() + "' đã tồn tại. Vui lòng chọn mã khác!");
+            redirectAttributes.addFlashAttribute("student", student);
+            return "redirect:/students/new";
         }
         
         service.save(student);
