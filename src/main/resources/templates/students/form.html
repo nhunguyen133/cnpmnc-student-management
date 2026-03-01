@@ -29,39 +29,56 @@
         >
           <input type="hidden" id="originalId" th:value="${student.id}" />
           <div class="mb-4">
-            <label class="form-label">Mã sinh viên</label>
+            <label class="form-label">Mã sinh viên <span class="text-danger">*</span></label>
             <input
               type="text"
               class="form-control form-control-lg"
               th:field="*{id}"
               placeholder="Ví dụ: SV001"
+              required
+              pattern="^[A-Z0-9]{3,10}$"
+              title="Mã sinh viên phải từ 3-10 ký tự (chữ in hoa và số)"
             />
+            <div class="form-text">
+              Mã sinh viên phải từ 3-10 ký tự, chỉ bao gồm chữ in hoa (A-Z) và số (0-9)
+            </div>
           </div>
 
           <div class="mb-4">
-            <label class="form-label">Họ và Tên</label>
+            <label class="form-label">Họ và Tên <span class="text-danger">*</span></label>
             <input
               type="text"
               class="form-control form-control-lg"
               th:field="*{name}"
               placeholder="Ví dụ: Nguyễn Văn A"
               required
+              minlength="3"
+              maxlength="100"
+              title="Họ tên phải từ 3-100 ký tự"
             />
+            <div class="form-text">
+              Nhập họ và tên đầy đủ (3-100 ký tự)
+            </div>
           </div>
 
           <div class="mb-4">
-            <label class="form-label">Địa chỉ Email</label>
+            <label class="form-label">Địa chỉ Email <span class="text-danger">*</span></label>
             <input
               type="email"
               class="form-control form-control-lg"
               th:field="*{email}"
               placeholder="example@hcmut.edu.vn"
               required
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+              title="Email không hợp lệ"
             />
+            <div class="form-text">
+              Nhập email hợp lệ (ví dụ: student@example.com)
+            </div>
           </div>
 
           <div class="mb-4">
-            <label class="form-label">Độ tuổi</label>
+            <label class="form-label">Độ tuổi <span class="text-danger">*</span></label>
             <input
               type="number"
               class="form-control form-control-lg"
@@ -69,7 +86,12 @@
               placeholder="Nhập độ tuổi hợp lệ..."
               required
               min="1"
+              max="150"
+              title="Tuổi phải từ 1 đến 150"
             />
+            <div class="form-text">
+              Nhập tuổi hợp lệ (1-150)
+            </div>
           </div>
 
           <div class="d-grid mt-4">
