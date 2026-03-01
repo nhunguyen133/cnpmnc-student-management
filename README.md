@@ -2,91 +2,22 @@
 
 Web application quản lý sinh viên sử dụng Spring Boot, Thymeleaf, và PostgreSQL.
 
-**Đại học Bách Khoa TP.HCM**  
-**Môn học:** Công nghệ Phần mềm Nâng cao (Advanced Software Engineering)  
-**Lab:** Student Management system - Final Product Deployment
-
 ---
 
-## Công nghệ sử dụng
+## Thông tin nhóm
 
-- **Backend Framework:** Spring Boot 3.4.1
-- **Template Engine:** Thymeleaf
-- **Database:** PostgreSQL (Neon.tech)
-- **Build Tool:** Maven
-- **UI Framework:** Bootstrap 5 + Bootstrap Icons
-- **Deployment:** Docker + Render.com
-- **Version Control:** Git + GitHub
+- **Trường:** Đại học Bách Khoa TP.HCM
+- **Khoa:** Khoa học và Kỹ thuật Máy tính
+- **Môn học:** Công nghệ Phần mềm Nâng cao
+- **Học kỳ:** 2 / Năm học 2025-2026
+- **Lab:** Student Management system - Final Product Deployment
 
----
+### Thành viên
 
-## Yêu cầu hệ thống (Local Development)
-
-- Java 17 hoặc cao hơn
-- PostgreSQL 12+ hoặc Docker
-- Maven 3.6+
-- Git
-
----
-
-## Cài đặt và Chạy (Local)
-
-### 1️. Clone repository
-
-```bash
-git clone https://github.com/nhunguyen133/2312535-2313342-cnpmnc252-lab-sm.git
-cd 2312535-2313342-cnpmnc252-lab-sm
-```
-
-### 2️. Cấu hình Database
-
-**Option A: Sử dụng PostgreSQL local**
-
-```sql
--- Tạo database
-CREATE DATABASE student_management;
-```
-
-Tạo file `.env`:
-```bash
-cp .env.example .env
-```
-
-Chỉnh sửa `.env`:
-```properties
-POSTGRES_HOST=localhost
-POSTGRES_PORT=5432
-POSTGRES_DB=student_management
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=your_password
-```
-
-**Option B: Sử dụng Docker**
-
-```bash
-docker run -d \
-  --name student-postgres \
-  -e POSTGRES_DB=student_management \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=postgres \
-  -p 5432:5432 \
-  postgres:15-alpine
-```
-
-### 3️. Build và chạy ứng dụng
-
-```bash
-# Build project
-./mvnw clean install
-
-# Chạy ứng dụng
-./mvnw spring-boot:run
-```
-
-### 4️. Truy cập ứng dụng
-
-- **Web UI:** http://localhost:8080/students
-- **REST API:** http://localhost:8080/api/students
+| MSSV | Họ và Tên | GitHub |
+|------|-----------|--------|
+| 2312535 | Nguyễn Quỳnh Như | [@nhunguyen133](https://github.com/nhunguyen133) |
+| 2313342 | Hồ Thị Minh Thu | [@Thu-sunrise](https://github.com/Thu-sunrise) |
 
 ---
 
@@ -178,6 +109,76 @@ student-management/
 
 ---
 
+## Yêu cầu hệ thống (Local Development)
+
+- Java 17 hoặc cao hơn
+- PostgreSQL 12+ hoặc Docker
+- Maven 3.6+
+- Git
+
+---
+
+## Cài đặt và Chạy (Local)
+
+### 1️. Clone repository
+
+```bash
+git clone https://github.com/nhunguyen133/2312535-2313342-cnpmnc252-lab-sm.git
+cd 2312535-2313342-cnpmnc252-lab-sm
+```
+
+### 2️. Cấu hình Database
+
+**Option A: Sử dụng PostgreSQL local**
+
+```sql
+-- Tạo database
+CREATE DATABASE student_management;
+```
+
+Tạo file `.env`:
+```bash
+cp .env.example .env
+```
+
+Chỉnh sửa `.env`:
+```properties
+POSTGRES_HOST=localhost
+POSTGRES_PORT=5432
+POSTGRES_DB=student_management
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=your_password
+```
+
+**Option B: Sử dụng Docker**
+
+```bash
+docker run -d \
+  --name student-postgres \
+  -e POSTGRES_DB=student_management \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=postgres \
+  -p 5432:5432 \
+  postgres:15-alpine
+```
+
+### 3️. Build và chạy ứng dụng
+
+```bash
+# Build project
+./mvnw clean install
+
+# Chạy ứng dụng
+./mvnw spring-boot:run
+```
+
+### 4️. Truy cập ứng dụng
+
+- **Web UI:** http://localhost:8080/students
+- **REST API:** http://localhost:8080/api/students
+
+---
+
 ## Docker
 
 ### Build & Run locally
@@ -206,6 +207,22 @@ docker-compose down
 # View logs
 docker-compose logs -f
 ```
+
+---
+
+## Trả lời câu hỏi lý thuyết (Lab 1)
+
+- **Tại sao Database lại chặn thao tác Insert một sinh viên có id trùng với một người đã có sẵn?**
+
+Cơ sở dữ liệu chặn thao tác này vì trường `id` được thiết lập làm Ràng buộc Khóa Chính (Primary Key). Khóa chính có chức năng định danh duy nhất cho mỗi bản ghi trong bảng. Do đó, hệ thống sẽ báo lỗi `UNIQUE constraint failed` để đảm bảo tính toàn vẹn và không cho phép trùng lặp dữ liệu.
+
+- **Khi Insert một sinh viên nhưng bỏ trống cột name (để NULL), Database có báo lỗi không? Sự thiếu chặt chẽ này ảnh hưởng gì khi code Java đọc dữ liệu lên?**
+
+Dựa vào câu lệnh tạo bảng, cột `name` (`name TEXT`) chưa được thiết lập ràng buộc `NOT NULL`. Do đó, cơ sở dữ liệu sẽ không báo lỗi khi lưu giá trị rỗng. Tuy nhiên, khi mã nguồn Java đọc dữ liệu lên, đối tượng sinh viên sẽ chứa giá trị `null` ở trường tên. Nếu ứng dụng cố gắng gọi các phương thức xử lý chuỗi trên thuộc tính này mà không kiểm tra trước, chương trình sẽ gặp lỗi `NullPointerException`.
+
+- **Tại sao mỗi lần tắt ứng dụng và chạy lại, dữ liệu cũ trong Database lại bị mất hết?**
+
+Nguyên nhân nằm ở cấu hình `spring.jpa.hibernate.ddl-auto=create` trong file `application.properties`. Thuộc tính `create` chỉ thị cho Hibernate tự động xóa toàn bộ dữ liệu và cấu trúc bảng cũ để tạo lại bảng mới hoàn toàn mỗi khi ứng dụng khởi động. Trong môi trường thực tế (production), cấu hình này sẽ được đổi thành `update` hoặc `none` để bảo vệ dữ liệu.
 
 ---
 
@@ -251,23 +268,6 @@ curl http://localhost:8080/api/students
 # Get student by ID
 curl http://localhost:8080/api/students/SV001
 ```
-
----
-
-## Thông tin nhóm
-
-- **Trường:** Đại học Bách Khoa TP.HCM
-- **Khoa:** Khoa học và Kỹ thuật Máy tính
-- **Môn học:** Công nghệ Phần mềm Nâng cao
-- **Học kỳ:** 2 / Năm học 2025-2026
-- **Lab:** Lab (student-management system) - Final Product
-
-### Thành viên
-
-| MSSV | Họ và Tên | GitHub |
-|------|-----------|--------|
-| 2312535 | Nguyễn Quỳnh Như | [@nhunguyen133](https://github.com/nhunguyen133) |
-| 2313342 | Hồ Thị Minh Thu | [@Thu-sunrise](https://github.com/Thu-sunrise) |
 
 ---
 
